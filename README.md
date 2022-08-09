@@ -6,11 +6,9 @@
 
 ### Installation
 
-
 ```shell
-$ go get github.com/2pay-co/2pay-golang-sdk
+$ go get github.com/2pay-co/golang-sdk
 ```
-
 
 ### Usage
 
@@ -19,27 +17,39 @@ Please see [examples](https://github.com/2pay-co/2pay-golang-sdk/tree/main/tests
 ### demo
 
 ```go
-use Pay\TwoPay;
-use Pay\SecurePay;
+package main
 
-ssssss
+import (
+	"fmt"
+	pay "github.com/2pay-co/golang-sdk"
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
-$secure_param = new SecurePay();
-$secure_param->amount = "3.2";
-$secure_param->callbackUrl = "";
-$secure_param->currency ="USD";
-$secure_param->goodsInfo = "";
-$secure_param->note = "test order";
-$secure_param->description = "order test";
-$secure_param->terminal = "ONLINE";
-$secure_param->vendor = "alipay";
-$secure_param->ipnUrl = '';
-$secure_param->reference = (string)time();
-$secure_param->timeout = "120";
+func main() {
 
-$two_pay = new TwoPay("merchant_no", "token");
-// $res is json string
-$res = $two_pay->SecurePay($secure_param);
+	t := pay.New("", "")
+	param := pay.SecurePay{
+		Currency:    "USD",
+		Amount:      "10",
+		Vendor:      "alipay",
+		Reference:   gtime.Datetime(),
+		Terminal:    "ONLINE",
+		IpnURL:      "https://google.com",
+		CallbackURL: "https://google.com",
+		Note:        "test order",
+		Description: "test order",
+		Timeout:     "120",
+		GoodsInfo: []pay.GoodsInfo{
+			{
+				"test goods 1", "1",
+			},
+			{
+				"test goods 2", "1",
+			},
+		},
+	}
 
-var_dump($res);
+	resp, err := t.SecurePay(&param)
+	fmt.Println(resp, err)
+}
 ```
